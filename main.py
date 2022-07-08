@@ -21,16 +21,36 @@ class Board:
     def final_state(self, show=False):
         for col in range(COLS):
             if self.squares[0][col] == self.squares[1][col] == self.squares[2][col] != 0:
+                if show:
+                    color = CIRC_COLOR if self.squares[0][col] == 2 else CROSS_COLOR
+                    iPos = (col*SQSIZE+SQSIZE//2, 20)
+                    fPos = (col*SQSIZE+SQSIZE//2, HEIGHT-20)
+                    pygame.draw.line(screen, color, iPos, fPos, CROSS_WIDTH)
                 return self.squares[0][col]
 
         for row in range(ROWS):
             if self.squares[row][0] == self.squares[row][1] == self.squares[row][2] != 0:
+                if show:
+                    color = CIRC_COLOR if self.squares[row][0] == 2 else CROSS_COLOR
+                    iPos = (20, row*SQSIZE+SQSIZE//2)
+                    fPos = (WIDTH-20, row*SQSIZE+SQSIZE//2)
+                    pygame.draw.line(screen, color, iPos, fPos, CROSS_WIDTH)
                 return self.squares[row][0]
 
         if self.squares[0][0] == self.squares[1][1] == self.squares[2][2] != 0:
+            if show:
+                color = CIRC_COLOR if self.squares[1][1] == 2 else CROSS_COLOR
+                iPos = (20, 20)
+                fPos = (WIDTH-20, HEIGHT-20)
+                pygame.draw.line(screen, color, iPos, fPos, CROSS_WIDTH)
             return self.squares[1][1]
 
         if self.squares[2][0] == self.squares[1][1] == self.squares[0][2] != 0:
+            if show:
+                color = CIRC_COLOR if self.squares[1][1] == 2 else CROSS_COLOR
+                iPos = (20, HEIGHT-20)
+                fPos = (WIDTH-20, 20)
+                pygame.draw.line(screen, color, iPos, fPos, CROSS_WIDTH)
             return self.squares[1][1]
 
         return 0
@@ -131,6 +151,8 @@ class Game:
         self.show_lines()
 
     def show_lines(self):
+        screen.fill(BG_COLOR)
+
         pygame.draw.line(screen, LINE_COLOR, (SQSIZE, 0),
                          (SQSIZE, HEIGHT), LINE_WIDTH)
         pygame.draw.line(screen, LINE_COLOR, (WIDTH-SQSIZE, 0),
@@ -198,6 +220,21 @@ def main():
 
                     if game.isover():
                         game.running = False
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_g:
+                    game.change_gamemode()
+
+                if event.key == pygame.K_r:
+                    game.reset()
+                    board = game.board
+                    ai = game.ai
+
+                if event.key == pygame.K_0:
+                    ai.level = 0
+
+                if event.key == pygame.K_1:
+                    ai.level = 1
 
         if game.gamemode == 'ai' and game.player == ai.player and game.running:
             pygame.display.update()
