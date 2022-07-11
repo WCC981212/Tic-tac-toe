@@ -4,7 +4,7 @@ import pygame
 import numpy as np
 import random
 
-from constants import *
+from constants_tic_tac_toe import *
 
 pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
